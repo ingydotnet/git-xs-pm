@@ -1,27 +1,43 @@
 NAME
-    Git::XS - Perl XS Wrapper of libgit2
+    Git::XS - Perl XS binding to libgit2
 
 SYNOPSIS
         use Git::XS;
 
-        my $git = Git::XS->new();
-    
-        $git->open("path/to/git/repo");
+        my $git = Git::XS->new(
+            repo => "path/to/git/repo",
+        );
 
+        $git->init;
+    
         print $git->status;
 
         $git->add('file.name');
 
-        $git->commit('-m' => 'It works');
+        $git->commit(-m => 'It works');
 
         $git->fetch;
 
         $git->push('--all');
 
-        $git->close;
-
 DESCRIPTION
-    This module is a Perl binding to libgit2. It attempts to do things
+    This module is a Perl binding to libgit2. It attempts to make a clean OO
+    API for dealing with git repositories from Perl. It should be very fast.
+
+STATUS
+    WARNING: This module is still in the "proof of concept" phase. Come back
+    later.
+
+    So far new() and init() are working. Kind of.
+
+INSTALLATION
+    You can install this module like any other CPAN module, but you will
+    need 2 things:
+
+        git - to clone the libgit2 repository from GitHub
+        cmake - to build libgit2
+
+    In the future, this module might use your systems copy of libgit2.
 
 AUTHOR
     Ingy döt Net <ingy@cpan.org>

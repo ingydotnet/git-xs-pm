@@ -1,6 +1,6 @@
 ##
 # name:      Git::XS
-# abstract:  Perl XS Wrapper of libgit2
+# abstract:  Perl XS binding to libgit2
 # author:    Ingy döt Net <ingy@cpan.org>
 # license:   perl
 # copyright: 2011
@@ -9,32 +9,24 @@ use 5.010;
 use strict;
 use warnings;
 use Mo 0.30 ();
+use XS::Object::Magic 0.04 ();
 
 package Git::XS;
-use Mo qw'default';
-use Git::XS::LibGit2;
+use Mo qw'default build required';
 
 our $VERSION = '0.01';
 
-has repo_path => ();
-has stdout => ();
-has stderr => ();
-has error => ();
-has is_open => (default => sub {0});
-has is_closed => (default => sub {0});
+use XSLoader;
+XSLoader::load(__PACKAGE__, $VERSION);
 
-sub open {
-    my $self = shift;
-    die "Git::XS object already open" if $self->is_open;
-    die "Git::XS object already closed" if $self->is_closed;
-    $self->open(1);
-}
+sub BUILD { shift->_build }
 
-sub close {
+has repo => ( required => 1 );
+
+sub repo_exists {
     my $self = shift;
-    die "Git::XS object is not open" unless $self->is_open;
-    die "Git::XS object already closed" if $self->is_closed;
-    $self->close(1);
+    my $repo = shift;
+    return -f "$repo/.git/conf" ? 1 : 0;
 }
 
 1;
@@ -43,22 +35,42 @@ sub close {
 
     use Git::XS;
 
-    my $git = Git::XS->new();
-    
-    $git->open("path/to/git/repo");
+    my $git = Git::XS->new(
+        repo => "path/to/git/repo",
+    );
 
+    $git->init;
+    
     print $git->status;
 
     $git->add('file.name');
 
-    $git->commit('-m' => 'It works');
+    $git->commit(-m => 'It works');
 
     $git->fetch;
 
     $git->push('--all');
 
-    $git->close;
+=head1 STATUS
+
+WARNING: This module is still in the "proof of concept" phase. Come back
+later.
+
+So far new() and init() are working. Kind of.
+
+Find me online if you have good ideas for this module.
 
 =head1 DESCRIPTION
 
-This module is a Perl binding to libgit2. It attempts to do things
+This module is a Perl binding to libgit2. It attempts to make a clean OO API
+for dealing with git repositories from Perl. It should be very fast.
+
+=head1 INSTALLATION
+
+You can install this module like any other CPAN module, but you will need 2
+things:
+
+    git - to clone the libgit2 repository from GitHub
+    cmake - to build libgit2
+
+In the future, this module might use your systems copy of libgit2.

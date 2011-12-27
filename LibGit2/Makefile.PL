@@ -5,31 +5,27 @@ use Cwd;
 
 my $start_dir = Cwd::cwd;
 my $libgit2_repo = 'git://github.com/ingydotnet/libgit2.git';
-my $libgit2_dir = 'libgit2';
-my $libgit2_build = "$libgit2_dir/build";
-my $libgit2_path = "$libgit2_build/libgit2.o";
+my $libgit2_path = Cwd::cwd . '/libgit2';
+my $libgit2_inc = "$libgit2_path/include";
+my $libgit2_build = "$libgit2_path/build";
+my $libgit2_so = "$libgit2_build/libgit2.so";
 
-if (not(-e $libgit2_dir)) {
-    system("git clone $libgit2_repo $libgit2_dir") == 0
+if (not(-e $libgit2_path)) {
+    system("git clone $libgit2_repo $libgit2_path") == 0
         or die "Can't git clone $libgit2_repo";
 }
 
-if (not(-f $libgit2_path)) {
-    chdir $libgit2_dir
-        or die "Can't chdir $libgit2_dir";
-    system("git checkout static-build") == 0
-        or die "Can't checkout static-build branch";
-
-    mkdir 'build'
-        or die "Can't chdir build";
-    chdir 'build'
-        or die "Can't chdir build";
+if (not(-f $libgit2_so)) {
+    mkdir $libgit2_build
+        or die "Can't mkdir $libgit2_build";
+    chdir $libgit2_build
+        or die "Can't chdir $libgit2_build";
 
     system("cmake ..") == 0
       or die "Can't cmake libgit2. Maybe you need to install cmake.";
 
     system("cmake --build .") == 0
-      or die "Can't cmake libgit2. Maybe you need to install cmake.";
+      or die "Can't cmake --build libgit2.";
 
     chdir $start_dir
         or die "Can't chdir to $start_dir";
@@ -39,18 +35,21 @@ my $obj_files = join ' ', map {
     my $c = $_;
     $c =~ s/\.c$/$Config::Config{_o}/;
     $c;
-} glob("*.c"), 'LibGit2.c';
+}
+# glob("*.c"),
+'LibGit2.c';
 
 WriteMakefile(
-    NAME => 'Git::XS::LibGit2',
+    NAME => 'Git::XS',
     PREREQ_PM => {},
     # CCFLAGS => '-ansi -pedantic -Wall',
     # CCFLAGS => '-ansi -Wall',
     # CCFLAGS => '-pedantic -Wall',
     # CCFLAGS => '-Wall',
-    LIBS => ['-lgit2'], # e.g., '-lm'
-    INC => "-I.",
+    LIBS => ["-L$libgit2_build -lgit2"],
+    INC => "-I. -I$libgit2_inc",
     OBJECT => $obj_files,
-    ABSTRACT_FROM => 'lib/Git/XS/LibGit2.pm',
+    # ABSTRACT_FROM => '../lib/Git/XS.pm',
+    ABSTRACT => 'Perl XS binding to libgit2',
     AUTHOR => 'Ingy döt Net <ingy@cpan.org>',
 );
