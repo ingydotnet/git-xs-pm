@@ -43,6 +43,8 @@ my $obj_files = join ' ', map {
 
 WriteMakefile(
     NAME => 'Git::XS',
+    # CCFLAGS => '-ansi -pedantic -Wall',
+    # CCFLAGS => '-ansi -Wall',
     PREREQ_PM => {},
     LIBS => ["-L$libgit2_build -lgit2"],
     INC => "-I. -I$libgit2_inc",

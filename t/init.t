@@ -1,4 +1,4 @@
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Git::XS;
 use File::Path;
@@ -17,4 +17,4 @@ ok $g->init(), 'init() succeeded';
 
 my $exists = -f "$repo/.git/config";
 
-# ok $exists, 'init() actually worked';
+ok $exists, 'init() actually worked';
