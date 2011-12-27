@@ -1,4 +1,6 @@
-static SV * call_getter(SV *self, char *has) {
+#include <xs_helpers.h>
+
+SV * call_getter(SV *self, char *has) {
     dSP;
     int count;
 
@@ -30,7 +32,7 @@ static SV * call_getter(SV *self, char *has) {
     return ret;
 }
 
-static int call_test(SV *self, char *test, SV* arg) {
+int call_test(SV *self, char *test, SV* arg) {
     dSP;
     int count;
 

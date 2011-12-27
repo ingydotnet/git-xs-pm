@@ -38,7 +38,7 @@ my $obj_files = join ' ', map {
     $c =~ s/\.c$/$Config::Config{_o}/;
     $c;
 }
-# glob("*.c"),
+glob("*.c"),
 'XS.c';
 
 WriteMakefile(

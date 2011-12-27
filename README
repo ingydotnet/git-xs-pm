@@ -41,6 +41,14 @@ INSTALLATION
 
     In the future, this module might use your system's copy of libgit2.
 
+METHODS
+    Git::XS->new(repo => $repo)
+        Create a new Git::XS object for dealing with a git repository.
+
+    $git->init([-bare])
+        Initialize a repo if it doesn't exist. You can pass '-bare' to
+        create a bare repo.
+
 AUTHOR
     Ingy döt Net <ingy@cpan.org>
 
@@ -51,4 +59,11 @@ COPYRIGHT AND LICENSE
     under the same terms as Perl itself.
 
     See http://www.perl.com/perl/misc/Artistic.html
+
+POD ERRORS
+    Hey! The above document had some coding errors, which are explained
+    below:
+
+    Around line 64:
+        You forgot a '=back' before '=head1'
 
