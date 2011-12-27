@@ -68,9 +68,9 @@ for dealing with git repositories from Perl. It should be very fast.
 =head1 INSTALLATION
 
 You can install this module like any other CPAN module, but you will need 2
-things:
+programs in your PATH:
 
     git - to clone the libgit2 repository from GitHub
     cmake - to build libgit2
 
-In the future, this module might use your systems copy of libgit2.
+In the future, this module might use your system's copy of libgit2.

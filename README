@@ -30,14 +30,16 @@ STATUS
 
     So far new() and init() are working. Kind of.
 
+    Find me online if you have good ideas for this module.
+
 INSTALLATION
     You can install this module like any other CPAN module, but you will
-    need 2 things:
+    need 2 programs in your PATH:
 
         git - to clone the libgit2 repository from GitHub
         cmake - to build libgit2
 
-    In the future, this module might use your systems copy of libgit2.
+    In the future, this module might use your system's copy of libgit2.
 
 AUTHOR
     Ingy döt Net <ingy@cpan.org>
